@@ -4,9 +4,12 @@ import "./App.css";
 import AddNewNote from "./components/AddNewNote";
 import NoteList from "./components/NoteList";
 import NoteStatus from "./components/NoteStatus";
+import Header from "./components/Header";
 
 function App() {
   const [notes, setNotes] = useState([]);
+
+  const [sortBy, setSortBy] = useState("latest");
 
   const handleAddNote = (newNote) => {
     // Prev notes is in the memory of the state
@@ -36,7 +39,11 @@ function App() {
 
   return (
     <div className="container">
-      <div className="note-header"></div>
+      <Header
+        notes={notes}
+        sortBy={sortBy}
+        onSort={(e) => setSortBy(e.target.value)}
+      />
       <div className="note-app">
         {/* we can pass functions as props. */}
         <AddNewNote onAddNote={handleAddNote} />
@@ -44,6 +51,7 @@ function App() {
           <NoteStatus notes={notes} />
           <NoteList
             notes={notes}
+            sortBy={sortBy}
             onDelete={handleDeleteNote}
             onComplete={handleCompleteNote}
           />
