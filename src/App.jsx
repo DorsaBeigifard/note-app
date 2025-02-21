@@ -12,6 +12,27 @@ function App() {
     setNotes((prevNotes) => [...prevNotes, newNote]);
   };
 
+  const handleDeleteNote = (id) => {
+    // const filteredNotes = notes.filter((note) => note.id !== id);
+    // setNotes(filteredNotes);
+    // better way:
+    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+  };
+
+  const handleCompleteNote = (e) => {
+    const noteId = Number(e.target.value);
+    // const newNotes = notes.map((note) =>
+    //   noteId === note.id ? { ...note, completed: !note.completed } : note
+    // );
+    // setNotes(newNotes);
+
+    setNotes((prevNotes) =>
+      prevNotes.map((note) =>
+        noteId === note.id ? { ...note, completed: !note.completed } : note
+      )
+    );
+  };
+
   return (
     <div className="container">
       <div className="note-header"></div>
@@ -19,7 +40,11 @@ function App() {
         {/* we can pass functions as props. */}
         <AddNewNote onAddNote={handleAddNote} />
         <div className="note-container">
-          <NoteList />
+          <NoteList
+            notes={notes}
+            onDelete={handleDeleteNote}
+            onComplete={handleCompleteNote}
+          />
         </div>
       </div>
     </div>
