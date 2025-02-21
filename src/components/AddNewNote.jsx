@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-export default function AddNewNote() {
+export default function AddNewNote({ onAddNote }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!title || !description) return null;
     const newNote = {
       title,
       description,
@@ -14,7 +16,9 @@ export default function AddNewNote() {
     };
     setTitle("");
     setDescription("");
+    onAddNote(newNote);
   };
+
   return (
     <div className="add-new-note">
       <h2>Add New Note</h2>
