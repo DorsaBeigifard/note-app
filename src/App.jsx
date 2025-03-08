@@ -17,7 +17,7 @@ function noteReducer(state, action) {
     case "delete":
       return state.filter((s) => s.id !== action.id);
     default:
-      return state;
+      throw new Error("Unknown action: " + action.type);
   }
 }
 
