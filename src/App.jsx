@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useReducer, useState } from "react";
 
 import "./App.css";
 import AddNewNote from "./components/AddNewNote";
@@ -6,35 +6,40 @@ import NoteList from "./components/NoteList";
 import NoteStatus from "./components/NoteStatus";
 import Header from "./components/Header";
 
+function noteReducer(state, action) {
+  switch (action.type) {
+    case "add":
+      return [...state, action.payload];
+    case "complete":
+      return state.map((s) =>
+        action.id === s.id ? { ...s, completed: !s.completed } : s
+      );
+    case "delete":
+      return state.filter((s) => s.id !== action.id);
+    default:
+      return state;
+  }
+}
+
 function App() {
-  const [notes, setNotes] = useState([]);
+  const initNotes = [];
 
   const [sortBy, setSortBy] = useState("latest");
 
+  const [notes, dispatch] = useReducer(noteReducer, initNotes);
+
   const handleAddNote = (newNote) => {
-    // Prev notes is in the memory of the state
-    setNotes((prevNotes) => [...prevNotes, newNote]);
+    dispatch({ type: "add", payload: newNote });
   };
 
   const handleDeleteNote = (id) => {
-    // const filteredNotes = notes.filter((note) => note.id !== id);
-    // setNotes(filteredNotes);
-    // better way:
-    setNotes((prevNotes) => prevNotes.filter((note) => note.id !== id));
+    dispatch({ type: "delete", id: id });
   };
 
   const handleCompleteNote = (e) => {
     const noteId = Number(e.target.value);
-    // const newNotes = notes.map((note) =>
-    //   noteId === note.id ? { ...note, completed: !note.completed } : note
-    // );
-    // setNotes(newNotes);
 
-    setNotes((prevNotes) =>
-      prevNotes.map((note) =>
-        noteId === note.id ? { ...note, completed: !note.completed } : note
-      )
-    );
+    dispatch({ type: "complete", id: noteId });
   };
 
   return (
