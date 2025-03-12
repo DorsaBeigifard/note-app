@@ -1,4 +1,7 @@
-function NoteStatus({ notes }) {
+import { useNotes } from "../context/NotesContext";
+
+function NoteStatus() {
+  const notes = useNotes();
   // Derived State -> computed from already created states
   const allNotes = notes.length;
   const completedNotes = notes.filter((note) => note.completed).length;
